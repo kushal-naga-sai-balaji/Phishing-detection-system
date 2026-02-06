@@ -86,7 +86,7 @@ Built-in security and administration:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/sangineedikushal/Phishing-detection-system.git
+git clone https://github.com/kushal-naga-sai-balaji/Phishing-detection-system.git
 cd Phishing-detection-system
 
 # 2. Navigate to the backend directory
@@ -293,7 +293,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 <div align="center">
 
-### Made with ❤️ by [Sangineedi Kushal](https://github.com/sangineedikushal)
+### Made with ❤️ by [Kushal Naga Sai Balaji](https://github.com/kushal-naga-sai-balaji)
 
 **⭐ Star this repo if you find it helpful!**
 
