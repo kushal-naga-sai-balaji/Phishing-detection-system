@@ -86,6 +86,36 @@ Chrome/Edge extension for seamless protection:
 
 ## 📦 Installation
 
+### Quick Start (Recommended) ⚡
+
+The easiest way to run PhishGuard:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/kushal-naga-sai-balaji/Phishing-detection-system.git
+cd Phishing-detection-system
+
+# 2. Run the startup script (auto-installs dependencies)
+# On macOS/Linux:
+./run.sh
+
+# On Windows:
+run.bat
+
+# Or use Python script (cross-platform):
+python3 run.py
+```
+
+That's it! The script will:
+- ✅ Check Python installation
+- ✅ Create virtual environment
+- ✅ Install all dependencies
+- ✅ Start the server automatically
+
+### Manual Setup (Alternative)
+
+If you prefer manual setup:
+
 ### Prerequisites
 
 - **Python 3.8+** installed on your system
