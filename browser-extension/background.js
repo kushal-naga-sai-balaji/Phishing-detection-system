@@ -132,3 +132,70 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
         });
     }
 });
+
+// Download Protection: Scan downloads before they complete
+if (chrome.downloads) {
+    chrome.downloads.onCreated.addListener(async (downloadItem) => {
+        // We can check the URL of the download
+        const url_result = await scanUrl(downloadItem.url);
+        
+        if (url_result.status === 'phishing' || url_result.score >= 70) {
+            chrome.downloads.cancel(downloadItem.id, () => {
+                chrome.notifications.create({
+                    type: 'basic',
+                    iconUrl: 'icons/icon128.png',
+                    title: '🚨 Download Blocked!',
+                    message: `PhishGuard blocked a suspicious download from: ${downloadItem.url}\nReason: ${url_result.details}`,
+                    priority: 2
+                });
+            });
+        }
+    });
+}
+
+// Handle scanning image content from background (to avoid CORS in content script)
+async function scanRemoteImage(imageUrl) {
+    try {
+        // Fetch image as blob
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        
+        // Prepare form data
+        const formData = new FormData();
+        formData.append('file', blob, 'image_scan.png');
+        
+        // Send to backend
+        const scanRes = await fetch(`${API_BASE_URL}/scan/file`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!scanRes.ok) throw new Error('Backend scan failed');
+        return await scanRes.json();
+        
+    } catch (error) {
+        console.error('Image scan error:', error);
+        return { status: 'error' };
+    }
+}
+
+// Add message handler for content script requesting image scan
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'scanUrl') {
+        scanUrl(request.url).then(result => sendResponse(result));
+        return true; 
+    }
+    
+    if (request.action === 'scanImage') {
+        scanRemoteImage(request.imageUrl).then(result => sendResponse(result));
+        return true;
+    }
+    
+    if (request.action === 'getStats') {
+        chrome.storage.local.get(['pagesScanned', 'threatsBlocked'], (data) => {
+            sendResponse(data);
+        });
+        return true;
+    }
+});
+

@@ -132,9 +132,56 @@ function monitorForms() {
 function setupLinkScanning() {
     document.addEventListener('mouseover', (e) => {
         if (e.target.tagName === 'A' && e.target.href) {
-            // Could implement tooltip showing scan result
-            // For now, just monitoring
+            // Check for suspiciously long URLs or IPs immediately
+            const url = e.target.href;
+            if (url.length > 100 || /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(url)) {
+                 chrome.runtime.sendMessage({ action: 'scanUrl', url: url }, (result) => {
+                     if (result && result.status === 'phishing') {
+                         e.target.style.border = '2px solid red';
+                         e.target.style.backgroundColor = 'rgba(255,0,0,0.1)';
+                         e.target.title = `⚠️ PHISHING: ${result.details}`;
+                     }
+                 });
+            }
         }
+    });
+}
+
+// Auto-scan images for QR codes or malware
+function autoScanImages() {
+    // Only scan images that are large enough to be content (ignore icons)
+    const images = Array.from(document.querySelectorAll('img')).filter(img => {
+        return img.width > 100 && img.height > 100 && img.src.startsWith('http');
+    });
+
+    // Limit to first 5 large images to prevent server overload
+    images.slice(0, 5).forEach(img => {
+        if (img.dataset.pgScanned) return;
+        img.dataset.pgScanned = 'true';
+        
+        chrome.runtime.sendMessage({ action: 'scanImage', imageUrl: img.src }, (result) => {
+            if (result && (result.status === 'malicious' || result.status === 'phishing')) {
+                // Highlight malicious image
+                img.style.border = '5px solid red';
+                img.style.filter = 'blur(5px)'; // Obfuscate
+                
+                // Add overlay warning
+                const warning = document.createElement('div');
+                warning.style.cssText = `
+                    position: absolute;
+                    background: red;
+                    color: white;
+                    padding: 4px;
+                    font-size: 12px;
+                    z-index: 1000;
+                    pointer-events: none;
+                `;
+                warning.textContent = "⚠️ THREAT DETECTED";
+                
+                // Position warning relative to parent if possible, or just skip sophisticated positioning for now
+                img.parentNode.insertBefore(warning, img);
+            }
+        });
     });
 }
 
@@ -154,6 +201,9 @@ function setupLinkScanning() {
                     showPhishingWarning(result.score, result.details);
                 }
             });
+            
+            // Trigger auto-scan for page content
+            setTimeout(autoScanImages, 2000); // Wait for page load
         }
     });
     
@@ -163,6 +213,8 @@ function setupLinkScanning() {
     // Re-monitor forms if page content changes dynamically
     const observer = new MutationObserver(() => {
         monitorForms();
+        // Debounce image scanning
+        // autoScanImages(); // Uncomment if you want aggressive scanning on scroll/dynamic load
     });
     
     observer.observe(document.body, {
