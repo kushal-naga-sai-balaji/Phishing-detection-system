@@ -47,7 +47,53 @@ def test_url_scan():
         print("Error:", e)
 
 def test_email_scan():
-    unblock_myself()
+    print_section("TESTING EMAIL ANALYSIS")
+    
+    # 1. Phishing Email
+    print("Analysing Phishing Email...")
+    email_data = {
+        "subject": "URGENT: Verify your account",
+        "body": "Dear user, click here to login to your bank account immediately or it will be suspended.",
+        "sender": "security@fake-bank-alert.com"
+    }
+    try:
+        res = requests.post(f"{BASE_URL}/scan/email", json=email_data)
+        print("Response:", json.dumps(res.json(), indent=2))
+    except Exception as e:
+        print("Error:", e)
+
+def test_file_scan():
+    print_section("TESTING FILE DETECTION")
+    
+    # 1. EICAR Test String (Simulated Malware)
+    print("Scanning Malicious File Content (EICAR)...")
+    eicar_content = b"X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
+    files = {'file': ('test_virus.txt', eicar_content, 'text/plain')}
+    
+    try:
+        res = requests.post(f"{BASE_URL}/scan/file", files=files)
+        print("Response:", json.dumps(res.json(), indent=2))
+    except Exception as e:
+        print("Error:", e)
+
+def check_admin_stats():
+    print_section("CHECKING ADMIN STATS")
+    try:
+        res = requests.get(f"{BASE_URL}/admin/ips")
+        print("Blocked IPs and History:", json.dumps(res.json(), indent=2))
+    except Exception as e:
+        print("Error:", e)
+
+if __name__ == "__main__":
+    # Wait for server to start
+    print("Waiting for server to be ready...")
+    time.sleep(2) 
+    
+    test_url_scan()
+    test_email_scan()
+    test_file_scan()
+    check_admin_stats()
+    print_section("DEMO COMPLETED")
     print_section("TESTING EMAIL DETECTION")
     
     # 1. Phishing Email
