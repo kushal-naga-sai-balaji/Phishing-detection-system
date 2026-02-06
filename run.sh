@@ -50,9 +50,10 @@ source venv/bin/activate
 
 # Check and install dependencies
 echo -e "\n${YELLOW}[3/4] Checking dependencies...${NC}"
-if ! pip show fastapi &> /dev/null; then
+# Use python -m pip to ensure we use the pip from the current python interpreter (venv)
+if ! python3 -m pip show fastapi &> /dev/null; then
     echo "📦 Installing dependencies from requirements.txt..."
-    pip install -r requirements.txt
+    python3 -m pip install -r requirements.txt
     echo -e "${GREEN}✅ Dependencies installed${NC}"
 else
     echo -e "${GREEN}✅ Dependencies are installed${NC}"

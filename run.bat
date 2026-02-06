@@ -45,10 +45,10 @@ call venv\Scripts\activate.bat
 REM Check and install dependencies
 echo.
 echo [3/4] Checking dependencies...
-pip show fastapi >nul 2>&1
+python -m pip show fastapi >nul 2>&1
 if %errorlevel% neq 0 (
     echo Installing dependencies from requirements.txt...
-    pip install -r requirements.txt
+    python -m pip install -r requirements.txt
     echo [OK] Dependencies installed
 ) else (
     echo [OK] Dependencies are installed

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+
 """
 PhishGuard Quick Start Script
 Run this script to start the PhishGuard backend server with automatic setup
@@ -61,12 +63,6 @@ def setup_venv():
     
     return venv_dir
 
-def get_pip_path(venv_dir):
-    if platform.system() == 'Windows':
-        return venv_dir / "Scripts" / "pip.exe"
-    else:
-        return venv_dir / "bin" / "pip"
-
 def get_python_path(venv_dir):
     if platform.system() == 'Windows':
         return venv_dir / "Scripts" / "python.exe"
@@ -77,12 +73,12 @@ def install_dependencies(venv_dir):
     print(f"\n{Colors.YELLOW}[3/4] Installing dependencies...{Colors.NC}")
     backend_dir = Path(__file__).parent / "backend"
     requirements_file = backend_dir / "requirements.txt"
-    pip_path = get_pip_path(venv_dir)
+    python_path = get_python_path(venv_dir)
     
     # Check if fastapi is installed
     try:
         subprocess.run(
-            [str(pip_path), "show", "fastapi"],
+            [str(python_path), "-m", "pip", "show", "fastapi"],
             capture_output=True,
             check=True
         )
@@ -90,7 +86,7 @@ def install_dependencies(venv_dir):
     except subprocess.CalledProcessError:
         print("📦 Installing from requirements.txt...")
         subprocess.run(
-            [str(pip_path), "install", "-r", str(requirements_file)],
+            [str(python_path), "-m", "pip", "install", "-r", str(requirements_file)],
             check=True
         )
         print(f"{Colors.GREEN}✅ Dependencies installed{Colors.NC}")

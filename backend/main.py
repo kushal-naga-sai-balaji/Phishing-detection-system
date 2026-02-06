@@ -54,13 +54,13 @@ async def ip_filtering_middleware(request: Request, call_next):
     response = await call_next(request)
     return response
 
-@appindex_path = os.path.join(FRONTEND_DIR, "index.html")
-    if os.path.exists(index_path):
-        return FileResponse(index_path)
-    return JSONResponse(content={"detail": "Frontend index.html not found"}, status_code=404
+@app.get("/")
 def read_root():
     # Return the index.html from frontend
-    return FileResponse("../frontend/index.html")
+    index_path = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return JSONResponse(content={"detail": "Frontend index.html not found"}, status_code=404)
 
 @app.post("/scan/url")
 def scan_url(request: URLScanRequest, client_request: Request):

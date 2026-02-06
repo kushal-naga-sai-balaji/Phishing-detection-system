@@ -83,16 +83,18 @@ def detect_file(filename: str, content: bytes) -> dict:
         
     # 2. Hash Check (Signature Matching)
     file_hash = hashlib.sha256(content).hexdigest()
-    # Also check MD5 because EICAR is often identified by it, 
-    # but for this demo let's just use the content string for EICAR if it's small, 
-    # or rely on the mock DB.
+    
+    # Check if hash is in known bad hashes
+    if file_hash in KNOWN_BAD_HASHES:
+         score = 100
+         details.append(f"Known Malware Detected (Hash Match): {KNOWN_BAD_HASHES[file_hash]}")
     
     # For EICAR specifically, let's check the content directly as it's a standard string
     try:
         content_str = content.decode('utf-8', errors='ignore').strip()
         if content_str in KNOWN_BAD_HASHES:
              score = 100
-             details.append(f"Known Malware Detected: {KNOWN_BAD_HASHES[content_str]}")
+             details.append(f"Known Malware Detected (content match): {KNOWN_BAD_HASHES[content_str]}")
     except:
         pass
 
