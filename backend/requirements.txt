@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pydantic
+requests
+python-multipart
+# Pillow is for image processing
+Pillow
+scikit-learn
+joblib
+# Computer Vision / QR
+opencv-python-headless
+numpy
+qrcode[pil]

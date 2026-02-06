@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title textaline="center">Phishing Detection System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="icon">🛡️</span>
+                <h1>PhishGuard <span class="badge">AI-Powered</span></h1>
+            </div>
+            <div class="status-pill" id="systemStatus">
+                <span class="dot"></span> System Active
+            </div>
+            <p class="global-hint">Tip: Paste (Cmd+V) or Drop anything anywhere to scan instantly.</p>
+        </header>
+
+        <main>
+            <div class="glass-panel main-scanner">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('url')">URL Scanner</button>
+                    <button class="tab-btn" onclick="switchTab('email')">Email Analyzer</button>
+                    <button class="tab-btn" onclick="switchTab('file')">File & QR Scan</button>
+                    <button class="tab-btn" onclick="switchTab('admin')">Admin / IP</button>
+                </div>
+
+                <div class="tab-content active" id="url-tab">
+                    <h2>Scan a URL</h2>
+                    <p class="subtitle">Detect phishing links instantly with our heuristic engine.</p>
+                    <div class="input-group">
+                        <input type="text" id="urlInput"
+                            placeholder="Enter URL to scan (e.g., http://suspicious-link.com)">
+                        <button class="primary-btn" onclick="scanUrl()">Scan Now</button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="email-tab">
+                    <h2>Analyze Email</h2>
+                    <p class="subtitle">Paste email content to check for social engineering patterns.</p>
+                    <div class="input-group vertical">
+                        <input type="text" id="emailSender" placeholder="Sender Address (e.g., alert@bank.com)">
+                        <input type="text" id="emailSubject" placeholder="Subject Line">
+                        <textarea id="emailBody" rows="4" placeholder="Paste email body content here..."></textarea>
+                        <button class="primary-btn" onclick="scanEmail()">Analyze Email</button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="file-tab">
+                    <h2>File, Virus & QR Scanner</h2>
+                    <p class="subtitle">Upload images or files to detect malicious signatures and QR codes.</p>
+                    <div class="upload-zone" id="dropZone">
+                        <input type="file" id="fileInput" hidden onchange="handleFileSelect(this)">
+                        <span class="upload-icon">📁</span>
+                        <p>Drag & drop or <span class="link"
+                                onclick="document.getElementById('fileInput').click()">browse file</span></p>
+                        <p id="fileName" class="file-name"></p>
+                    </div>
+                    <button class="primary-btn full-width" onclick="scanFile()">Scan File</button>
+                </div>
+
+                <div class="tab-content" id="admin-tab">
+                    <h2>IP Management</h2>
+                    <p class="subtitle">Monitor and manage blocked IP addresses.</p>
+                    <div class="ip-list" id="ipList">
+                        <!-- Populated by JS -->
+                        <div class="loading">Loading IPs...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-area hidden" id="resultArea">
+                <div class="glass-panel result-card">
+                    <div class="result-header">
+                        <h3>Scan Result</h3>
+                        <span class="score-badge" id="resultBadge">Safe</span>
+                    </div>
+                    <div class="result-body">
+                        <div class="score-circle">
+                            <span id="scoreValue">0</span>
+                            <span class="label">Risk Score</span>
+                        </div>
+                        <div class="details">
+                            <h4>Analysis Details:</h4>
+                            <p id="resultDetails">No threats detected.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
