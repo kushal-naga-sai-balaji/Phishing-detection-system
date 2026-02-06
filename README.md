@@ -27,6 +27,7 @@ PhishGuard is an intelligent cybersecurity tool that combines **heuristic analys
 - 🔒 **Multi-Layer Protection** - Combines ML predictions with rule-based heuristics for robust detection
 - 🌐 **Modern Web Interface** - Beautiful, responsive UI with drag-and-drop support
 - 🛡️ **IP Protection** - Automatic blocking of suspicious IP addresses
+- 🧩 **Browser Extension** - Chrome/Edge extension for real-time browsing protection
 
 ---
 
@@ -60,15 +61,24 @@ Built-in security and administration:
 - Admin dashboard for IP management
 - Real-time status monitoring
 
+### 🧩 Browser Extension
+Chrome/Edge extension for seamless protection:
+- Auto-scan pages as you browse
+- Real-time phishing warnings
+- Right-click context menu to scan links
+- Form submission protection
+- Desktop notifications for threats
+- Statistics tracking
+
 ---
 
 ## 🚀 Quick Demo
 
 <div align="center">
 
-| URL Scanning | Email Analysis | File Upload |
+| URL Scanning | Email Analysis | Browser Extension |
 |:---:|:---:|:---:|
-| Paste any URL to check | Analyze email headers & body | Drag & drop files to scan |
+| Paste any URL to check | Analyze email headers & body | Real-time browsing protection |
 
 </div>
 
@@ -103,6 +113,22 @@ pip install -r requirements.txt
 python main.py
 ```
 
+### Browser Extension Setup
+
+Install the PhishGuard browser extension for real-time protection:
+
+1. **Make sure the backend is running** (see steps above)
+2. **Open Chrome/Edge Extensions Page**
+   - Chrome: `chrome://extensions/`
+   - Edge: `edge://extensions/`
+3. **Enable Developer Mode** (toggle in top right)
+4. **Load Extension**
+   - Click "Load unpacked"
+   - Select the `browser-extension` folder
+5. **Pin the Extension** to your toolbar
+
+📖 Detailed instructions: See [browser-extension/INSTALLATION.md](browser-extension/INSTALLATION.md)
+
 ### Access the Application
 
 Once running, open your browser and navigate to:
@@ -112,6 +138,7 @@ Once running, open your browser and navigate to:
 | 🌐 **Web App** | [http://localhost:8000](http://localhost:8000) |
 | 📚 **API Docs** | [http://localhost:8000/docs](http://localhost:8000/docs) |
 | 🔧 **ReDoc** | [http://localhost:8000/redoc](http://localhost:8000/redoc) |
+| 🧩 **Extension** | Click PhishGuard icon in toolbar |
 
 ---
 
@@ -177,28 +204,28 @@ file: <your-file>
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        PhishGuard System                        │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────┐  │
-│  │   Frontend   │───▶│   FastAPI    │───▶│   ML Engine      │  │
-│  │  (HTML/JS)   │    │   Backend    │    │  (Naive Bayes)   │  │
-│  └──────────────┘    └──────────────┘    └──────────────────┘  │
-│         │                   │                     │             │
-│         │                   ▼                     │             │
-│         │            ┌──────────────┐             │             │
-│         │            │   Detector   │◀────────────┘             │
-│         │            │   Service    │                           │
-│         │            └──────────────┘                           │
-│         │                   │                                   │
-│         ▼                   ▼                                   │
-│  ┌──────────────┐    ┌──────────────┐                          │
-│  │  Static UI   │    │ IP Manager   │                          │
-│  │   Assets     │    │  & Blocker   │                          │
-│  └──────────────┘    └──────────────┘                          │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          PhishGuard System                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌───────────────┐    ┌──────────────┐    ┌──────────────────┐        │
+│  │   Frontend    │───▶│   FastAPI    │───▶│   ML Engine      │        │
+│  │  (HTML/JS/CSS)│    │   Backend    │    │  (Naive Bayes)   │        │
+│  └───────────────┘    └──────────────┘    └──────────────────┘        │
+│         │                    │                      │                   │
+│         │                    ▼                      │                   │
+│  ┌───────────────┐    ┌──────────────┐             │                   │
+│  │   Browser     │───▶│   Detector   │◀────────────┘                   │
+│  │   Extension   │    │   Service    │                                 │
+│  └───────────────┘    └──────────────┘                                 │
+│         │                    │                                          │
+│         │                    ▼                                          │
+│         │             ┌──────────────┐                                  │
+│         └────────────▶│ IP Manager   │                                  │
+│                       │  & Blocker   │                                  │
+│                       └──────────────┘                                  │
+│                                                                         │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Project Structure
@@ -214,6 +241,15 @@ file: <your-file>
 │       ├── 📄 detector.py      # Core detection logic
 │       ├── 📄 ip_manager.py    # IP blocking system
 │       └── 📄 ml_engine.py     # ML model (TF-IDF + Naive Bayes)
+├── 📁 browser-extension/
+│   ├── 📄 manifest.json        # Extension configuration
+│   ├── 📄 popup.html           # Extension popup UI
+│   ├── 📄 popup.css            # Popup styling
+│   ├── 📄 popup.js             # Popup logic
+│   ├── 📄 background.js        # Background service worker
+│   ├── 📄 content.js           # Content script (page injection)
+│   ├── 📄 INSTALLATION.md      # Extension setup guide
+│   └── 📁 icons/               # Extension icons
 ├── 📁 frontend/
 │   ├── 📄 index.html           # Main web interface
 │   ├── 📄 script.js            # Frontend logic
