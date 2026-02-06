@@ -16,9 +16,12 @@ ml_engine.load_model()
 app = FastAPI(title="Phishing Detection System")
 
 # Mount Static Files (Frontend)
-# We assume this is run from the 'backend' directory
-if os.path.exists("../frontend"):
-    app.mount("/static", StaticFiles(directory="../frontend"), name="static")
+# Robust path resolution
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), "frontend")
+
+if os.path.exists(FRONTEND_DIR):
+    app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 # CORS setup
 app.add_middleware(
@@ -51,7 +54,10 @@ async def ip_filtering_middleware(request: Request, call_next):
     response = await call_next(request)
     return response
 
-@app.get("/")
+@appindex_path = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return JSONResponse(content={"detail": "Frontend index.html not found"}, status_code=404
 def read_root():
     # Return the index.html from frontend
     return FileResponse("../frontend/index.html")

@@ -4,7 +4,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
 
-MODEL_PATH = "model.pkl"
+# Use absolute path for model file
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(BASE_DIR, "model.pkl")
 
 # Small embedded dataset for demonstration/bootstrapping
 # In a real system, this would be loaded from a large CSV

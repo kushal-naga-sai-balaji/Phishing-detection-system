@@ -2,7 +2,10 @@ import time
 import json
 import os
 
-DATA_FILE = "ip_data.json"
+# Use absolute path for data file
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_FILE = os.path.join(BASE_DIR, "ip_data.json")
+
 BLOCK_THRESHOLD = 3
 BLOCK_DURATION = 300
 
