@@ -28,7 +28,6 @@ PhishGuard is an intelligent cybersecurity tool that combines **heuristic analys
 - 🌐 **Modern Web Interface** - Beautiful, responsive UI with drag-and-drop support
 - 🛡️ **IP Protection** - Automatic blocking of suspicious IP addresses
 - 🧩 **Browser Extension** - Chrome/Edge extension for real-time browsing protection
-- 📱 **Mobile Application** - React Native app for on-the-go protection
 
 ---
 
@@ -149,25 +148,6 @@ python main.py
 Install the PhishGuard browser extension for real-time protection:
 
 1. **Make sure the backend is running** (see steps above)
-
-### Mobile Application Setup
-
-Run the PhishGuard mobile app (Python/Kivy based):
-
-1. **Navigate to the mobile app directory**:
-   ```bash
-   cd mobile_app
-   ```
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Start the app**:
-   ```bash
-   python main.py
-   ```
-
-See [mobile_app/README.md](mobile_app/README.md) for Android packaging instructions via Buildozer.
 2. **Open Chrome/Edge Extensions Page**
    - Chrome: `chrome://extensions/`
    - Edge: `edge://extensions/`
